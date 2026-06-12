@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import nltk
 import re
+import pickle
 
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
@@ -91,13 +92,17 @@ print(f'Vectorized X_test: {X_test}')
 
 #instantiate the model
 
-model = LogisticRegression()
+model = LogisticRegression(max_iter=1000)
 model.fit(X_train, y_train)
 
 predictions = model.predict(X_test)
 
+# Model Evaluation
 print(classification_report(y_test,  predictions))
 print(confusion_matrix(y_test,  predictions))
 print(accuracy_score(y_test,  predictions))
 
+# saving the trained model
+file = 'sentiment_model.sav'
+pickle.dump(model, open(file, 'wb'))
 
