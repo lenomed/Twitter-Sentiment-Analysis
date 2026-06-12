@@ -44,7 +44,7 @@ print(data.head(10))
 target_categorical_values = data['target'].value_counts()
 print(target_categorical_values)
 sns.countplot(x='target', data=data)
-plt.show()
+#plt.show()
 
 data['target'] = data['target'].map({4: 1, 0: 0}).astype(int)
 print(data['target'])
@@ -66,6 +66,7 @@ def stemming(content):
     stemmed = ' '.join(stemmed)
     return stemmed
 
-stemmed_output = stemming(data['text'])
-print(stemmed_output)
-print(data['text']) 
+data['stemmed_output']= data['text'].apply(stemming)
+print(data['stemmed_output'])
+
+ 
