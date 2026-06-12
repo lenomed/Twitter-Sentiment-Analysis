@@ -16,7 +16,7 @@ from sklearn.metrics import accuracy_score
 
 
 # Load the dataset
-data = pd.read_csv(r'C:\\Users\\kelec\\lenomed\\Twitter-Sentiment-Analysis\\twitter_data.csv', encoding='cp1252')
+data = pd.read_csv(r'C:\Users\kelec\source\repos\Twitter-Sentiment-Analysis\twitter_data.csv', encoding='cp1252')
 
 # checking out the characteristics of the data set
 print(data.head(10))
@@ -31,8 +31,8 @@ print(data.columns)
 
 #rename the columns
 
-column_names = ['target','target_Id', 'Id', 'data', 'user', 'text']
-data = pd.read_csv(r'C:\\Users\\kelec\\lenomed\\Twitter-Sentiment-Analysis\\twitter_data.csv',names=column_names, encoding='cp1252')
+column_names = ['target', 'Id', 'date','flag', 'user', 'text']
+data = pd.read_csv(r'C:\Users\kelec\source\repos\Twitter-Sentiment-Analysis\twitter_data.csv',names=column_names, encoding='cp1252')
 
 print(data.head(10))
 
@@ -46,4 +46,26 @@ print(target_categorical_values)
 sns.countplot(x='target', data=data)
 plt.show()
 
-data = data.map({'4':1})
+data['target'] = data['target'].map({4: 1, 0: 0}).astype(int)
+print(data['target'])
+
+# stemming
+# it is the process of reeducing a word to it's root word
+# i am doing all these to resuce the data set as much as possible and to reduce ambiguity and processing time.
+
+p_stem = PorterStemmer()
+
+print(data['text'])
+
+def stemming(content):
+
+    stemmed = re.sub('[^a-zA-Z]', ' ', content) 
+    stemmed = stemmed.lower()   
+    stemmed= stemmed.split()
+    stemmed=[p_stem.stem(word) for word in stemmed if not word in stopwords.words('english')]
+    stemmed = ' '.join(stemmed)
+    return stemmed
+
+stemmed_output = stemming(data['text'])
+print(stemmed_output)
+print(data['text']) 
