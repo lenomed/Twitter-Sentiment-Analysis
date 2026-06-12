@@ -11,7 +11,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
 
 
@@ -57,6 +57,7 @@ p_stem = PorterStemmer()
 
 print(data['text'])
 
+
 def stemming(content):
 
     stemmed = re.sub('[^a-zA-Z]', ' ', content) 
@@ -67,6 +68,36 @@ def stemming(content):
     return stemmed
 
 data['stemmed_output']= data['text'].apply(stemming)
-print(data['stemmed_output'])
+print(f'this is stem output{data['stemmed_output']}')
 
- 
+data.drop(['Id', 'date', 'flag', 'user', 'text'],axis=1, inplace=True)
+
+print(data.head(20))
+
+# spliting my data set
+
+X = data.drop('target', axis=1).values
+y= data['target'].values
+
+X_train,X_test,y_train,y_test = train_test_split(X,y, test_size=.4, stratify=y, random_state=101)
+
+#converting texts to vectors using Tfidf Vectorizer
+vectorizer = TfidfVectorizer()
+X_train = vectorizer.fit_transform(X_train)
+X_test = vectorizer.transform(X_test)
+
+print(f'Vectorized X_train: {X_train}')
+print(f'Vectorized X_test: {X_test}')
+
+#instantiate the model
+
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+predictions = model.predict(X_test)
+
+print(classification_report(y_test,  predictions))
+print(confusion_matrix(y_test,  predictions))
+print(accuracy_score(y_test,  predictions))
+
+
