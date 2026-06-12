@@ -106,3 +106,7 @@ print(accuracy_score(y_test,  predictions))
 file = 'sentiment_model.sav'
 pickle.dump(model, open(file, 'wb'))
 
+# saving the vectorizer
+vectorizer_file = 'vectorizer.sav'
+pickle.dump(vectorizer, open(vectorizer_file, 'wb'))
+
